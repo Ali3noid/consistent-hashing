@@ -1,4 +1,4 @@
-package com.turbo.com.turbo.consistenthashing
+package com.turbo.consistenthashing
 
 // =============================================================================
 // TASK 2: Stability during server changes 🟢

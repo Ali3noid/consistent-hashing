@@ -1,6 +1,6 @@
 package com.turbo.consistenthashing
 
-import com.turbo.com.turbo.consistenthashing.ReplicatedConsistentHashRing
+import com.turbo.consistenthashing.ReplicatedConsistentHashRing
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

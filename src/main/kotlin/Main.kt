@@ -1,7 +1,7 @@
 package com.turbo
 
-import com.turbo.com.turbo.consistenthashing.StableConsistentHashRing
-import com.turbo.com.turbo.consistenthashing.TraditionalHashing
+import com.turbo.consistenthashing.StableConsistentHashRing
+import com.turbo.consistenthashing.TraditionalHashing
 
 fun main() {
     // Demo: Compare traditional modulo hashing vs consistent hashing on node add/remove impact

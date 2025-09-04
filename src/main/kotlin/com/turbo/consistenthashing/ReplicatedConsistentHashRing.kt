@@ -1,4 +1,4 @@
-package com.turbo.com.turbo.consistenthashing
+package com.turbo.consistenthashing
 
 // =============================================================================
 // TASK 5: Data Replication

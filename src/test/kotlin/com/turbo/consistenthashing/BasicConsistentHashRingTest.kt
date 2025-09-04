@@ -1,6 +1,6 @@
 package com.turbo.consistenthashing
 
-import com.turbo.com.turbo.consistenthashing.BasicConsistentHashRing
+import com.turbo.consistenthashing.BasicConsistentHashRing
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

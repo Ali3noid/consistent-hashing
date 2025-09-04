@@ -1,4 +1,4 @@
-package com.turbo.com.turbo.consistenthashing
+package com.turbo.consistenthashing
 
 import java.security.MessageDigest
 import kotlin.math.abs

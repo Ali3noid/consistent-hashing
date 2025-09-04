@@ -1,4 +1,4 @@
-package com.turbo.com.turbo.consistenthashing
+package com.turbo.consistenthashing
 
 interface BaseHashing {
     fun addServer(serverId: String)
