@@ -29,4 +29,3 @@ when the number of servers changes.
 
 ---
 
-➡️ Proceed to Task 1 (basic consistent hashing) once all tests here are green.

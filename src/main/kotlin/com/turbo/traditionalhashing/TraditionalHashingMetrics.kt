@@ -1,44 +1,41 @@
 package com.turbo.traditionalhashing
 
-import com.turbo.math.MathOperations
-
 /**
  * Measurement utilities for TraditionalHashing that DO NOT mutate the original sharder.
  * Analytical impact for modulo-based sharding:
  *   impact = 1 - gcd(N, M) / max(N, M)
  */
-class TraditionalHashingMetrics(
-    private val sharder: TraditionalHashing
-) : MathOperations { // gain gcd() & stdDevPercent()
+class TraditionalHashingMetrics : TraditionalHashing() {
 
-    /** Generic: apply [operation] on a COPY and compute impact N->M analytically. */
-    fun impact(operation: (TraditionalHashing) -> Unit): Double {
-        val beforeN = sharder.getServersCount()
-        val tmp = TraditionalHashing().also { cloneFrom(sharder, it) }
-        operation(tmp)
-        val afterN = tmp.getServersCount()
-
-        if (beforeN == afterN) return 0.0
-        if (beforeN == 0 && afterN > 0) return 1.0
-        if (afterN == 0 && beforeN > 0) return 1.0
-
-        val g = gcd(beforeN, afterN)
-        val unchanged = g.toDouble() / maxOf(beforeN, afterN).toDouble()
-        return 1.0 - unchanged
+    // Return the key -> server map for a list of keys
+    fun getKeyAssignments(keys: List<String>): Map<String, String?> {
+        return keys.associateWith { key -> getServerForKey(key) }
     }
 
-    fun impactOfAddition(newServerId: String): Double =
-        impact { it.addServer(newServerId) }
+    /** Generic: apply [operation] on a COPY and compute impact. */
+    fun impact(keys: List<String>, operation: (TraditionalHashing) -> Unit): Double {
+        if (keys.isEmpty()) return 0.0
 
-    fun impactOfRemoval(serverId: String): Double =
-        impact { it.removeServer(serverId) }
+        val before = getKeyAssignments(keys)
+        val tmp = TraditionalHashing().apply {
+            this@TraditionalHashingMetrics.getAllServers().forEach { addServer(it) }
+        }
+        operation(tmp)
+        val after = keys.associateWith { key -> tmp.getServerForKey(key) }
+
+        val changed = keys.count { key -> (before[key] != after[key]) }
+
+        return changed.toDouble() / keys.size.toDouble()
+    }
+
+    fun impactOfAddition(keys: List<String>, newServerId: String): Double =
+        impact(keys) { it.addServer(newServerId) }
+
+    fun impactOfRemoval(keys: List<String>, serverId: String): Double =
+        impact(keys) { it.removeServer(serverId) }
 
     /** Optional sampling for charts/sanity checks. */
     fun distribution(keys: List<String>): Map<String, Int> =
-        keys.mapNotNull { sharder.getServerForKey(it) }
+        keys.mapNotNull { getServerForKey(it) }
             .groupingBy { it }.eachCount()
-
-    private fun cloneFrom(src: TraditionalHashing, dst: TraditionalHashing) {
-        src.getAllServers().forEach { dst.addServer(it) }
-    }
 }
